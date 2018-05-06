@@ -1,9 +1,11 @@
 package com.cheesycoder.repositorydemo
 
 import com.cheesycoder.repositorydemo.di.ActivityScoped
-import dagger.Binds
+import com.cheesycoder.repositorydemo.di.FragmentScoped
+import com.cheesycoder.repositorydemo.ui.list.ListFragment
 import dagger.Module
 import dagger.Provides
+import dagger.android.ContributesAndroidInjector
 
 /**
  * Author: jinwo
@@ -30,4 +32,8 @@ abstract class MainActivityModule {
             return FlowManager(activity)
         }
     }
+
+    @FragmentScoped
+    @ContributesAndroidInjector
+    abstract fun listFragment(): ListFragment
 }

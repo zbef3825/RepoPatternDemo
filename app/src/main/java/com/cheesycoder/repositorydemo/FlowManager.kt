@@ -1,5 +1,6 @@
 package com.cheesycoder.repositorydemo
 
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import com.cheesycoder.repositorydemo.di.ActivityScoped
 import javax.inject.Inject
@@ -19,4 +20,5 @@ import javax.inject.Inject
  */
 @ActivityScoped
 class FlowManager @Inject constructor(val activity: AppCompatActivity) {
+    private val fragmentManager: FragmentManager = activity.supportFragmentManager
 }

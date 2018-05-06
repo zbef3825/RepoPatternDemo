@@ -1,13 +1,10 @@
 package com.cheesycoder.repositorydemo.di
 
-import android.content.Context
-import com.cheesycoder.repositorydemo.DemoApplication
-import dagger.Binds
-import dagger.Module
+import javax.inject.Scope
 
 /**
  * Author: jinwo
- * Date: 2018-05-05
+ * Date: 2018-05-06
  * Package: com.cheesycoder.repositorydemo.di
  *
  *\      _..--'''@   @'''--.._
@@ -18,8 +15,8 @@ import dagger.Module
  *\    '._ ~ ~ ~ |,/`````````````
  *\       ''--.~.|/
  */
-@Module
-abstract class AppModule {
-    @Binds
-    abstract fun bindContext(application: DemoApplication): Context
+@MustBeDocumented
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class FragmentScoped {
 }

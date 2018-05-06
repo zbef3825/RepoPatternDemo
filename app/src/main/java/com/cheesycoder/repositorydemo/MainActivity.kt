@@ -1,7 +1,10 @@
 package com.cheesycoder.repositorydemo
 
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import com.cheesycoder.repositorydemo.vm.WatchlistViewModel
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -10,6 +13,11 @@ class MainActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var flowManager: FlowManager
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    lateinit var watchlistViewModel: WatchlistViewModel
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -32,6 +40,8 @@ class MainActivity : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        watchlistViewModel = ViewModelProviders.of(this,viewModelFactory)[WatchlistViewModel::class.java]
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
