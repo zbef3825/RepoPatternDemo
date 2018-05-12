@@ -57,22 +57,24 @@ class FlowManager @Inject constructor(
     }
 
     private fun displayFragmentWithTag(tag: String, requireGet: Boolean) {
-        val fragment: Fragment = when(tag) {
+        val fragment: Fragment? = when(tag) {
             AListFragment.TAG -> {
                 if (requireGet) aListFragmentProvider.get()
-                else fragmentManager.findFragmentByTag(tag)
+                else null
             }
             BListFragment.TAG -> {
                 if (requireGet) bListFragmentProvider.get()
-                else fragmentManager.findFragmentByTag(tag)
+                else null
             }
             else -> {
                 if (requireGet) reportFragmentProvider.get()
-                else fragmentManager.findFragmentByTag(tag)
+                else null
             }
         }
-        fragmentManager.beginTransaction()
-                .replace(rootViewId, fragment, tag)
-                .commit()
+        if (fragment != null) {
+            fragmentManager.beginTransaction()
+                    .replace(rootViewId, fragment, tag)
+                    .commit()
+        }
     }
 }
