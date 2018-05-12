@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.cheesycoder.repositorydemo.R
+import com.cheesycoder.repositorydemo.di.ActivityScoped
 import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 /**
  * Author: jinwo
@@ -20,10 +22,15 @@ import dagger.android.support.DaggerFragment
  *\    '._ ~ ~ ~ |,/`````````````
  *\       ''--.~.|/
  */
-class ReportFragment: DaggerFragment() {
+@ActivityScoped
+class ReportFragment @Inject constructor(): DaggerFragment() {
+
+    companion object {
+        val TAG = "report.fragment"
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View? = inflater.inflate(R.layout.fragment_list, container, false)
+        val view: View? = inflater.inflate(R.layout.fragment_report, container, false)
         return view
     }
 }
