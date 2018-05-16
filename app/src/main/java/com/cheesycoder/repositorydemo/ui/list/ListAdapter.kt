@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.cheesycoder.repositorydemo.R
+import com.cheesycoder.repositorydemo.model.WatchlistDataModel
 import com.cheesycoder.repositorydemo.vm.WatchlistViewModel
 
 /**
@@ -21,12 +22,14 @@ import com.cheesycoder.repositorydemo.vm.WatchlistViewModel
  *\    '._ ~ ~ ~ |,/`````````````
  *\       ''--.~.|/
  */
-fun MutableList<WatchlistViewModel>?.size(): Int {
-    return this?.size ?: 0
-}
 
 class ListAdapter(val context: Context?): RecyclerView.Adapter<ListAdapter.SimpleViewHolder>() {
-    var internalData: MutableList<WatchlistViewModel>? = null
+    var internalData: List<WatchlistDataModel> = mutableListOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder
             = SimpleViewHolder(
             LayoutInflater.from(context).inflate(R.layout.view_simple_holder,
@@ -34,7 +37,7 @@ class ListAdapter(val context: Context?): RecyclerView.Adapter<ListAdapter.Simpl
                     false)
     )
 
-    override fun getItemCount(): Int = internalData.size()
+    override fun getItemCount(): Int = internalData.size
 
     override fun onBindViewHolder(holder: SimpleViewHolder, position: Int) {
     }

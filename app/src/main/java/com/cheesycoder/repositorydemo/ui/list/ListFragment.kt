@@ -1,5 +1,7 @@
 package com.cheesycoder.repositorydemo.ui.list
 
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.AppCompatButton
 import android.support.v7.widget.LinearLayoutManager
@@ -12,7 +14,9 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import butterknife.Unbinder
 import com.cheesycoder.repositorydemo.R
+import com.cheesycoder.repositorydemo.vm.WatchlistViewModel
 import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 /**
  * Author: jinwo
@@ -35,7 +39,17 @@ abstract class ListFragment : DaggerFragment() {
     @BindView(R.id.list_view)
     protected lateinit var listView: RecyclerView
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    protected lateinit var watchlistViewModel: WatchlistViewModel
+
     private var unBinder: Unbinder? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        watchlistViewModel = ViewModelProviders.of(this, viewModelFactory)[WatchlistViewModel::class.java]
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list, container, false)?.apply {
@@ -44,6 +58,16 @@ abstract class ListFragment : DaggerFragment() {
             listView.adapter = getAdapterFromChildFragment()
             button.text = getButtonText()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        watchlistViewModel.start()
+    }
+
+    override fun onPause() {
+        watchlistViewModel.stop()
+        super.onPause()
     }
 
     override fun onDestroyView() {

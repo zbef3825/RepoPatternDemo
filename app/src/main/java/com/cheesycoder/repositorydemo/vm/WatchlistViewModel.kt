@@ -1,6 +1,11 @@
 package com.cheesycoder.repositorydemo.vm
 
-import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.*
+import android.util.Log
+import com.cheesycoder.repositorydemo.api.Api
+import com.cheesycoder.repositorydemo.api.ApiInteractor
+import com.cheesycoder.repositorydemo.model.WatchlistDataModel
+import retrofit2.Retrofit
 import javax.inject.Inject
 
 /**
@@ -16,5 +21,19 @@ import javax.inject.Inject
  *\    '._ ~ ~ ~ |,/`````````````
  *\       ''--.~.|/
  */
-class WatchlistViewModel @Inject constructor(): ViewModel() {
+class WatchlistViewModel @Inject constructor(
+        val apiInteractor: ApiInteractor
+): ViewModel() {
+
+    val watchlist: MutableLiveData<List<WatchlistDataModel>> by lazy {
+        MutableLiveData<List<WatchlistDataModel>>()
+    }
+
+    fun start() {
+        Log.d("DEBUGGER", "STARTING")
+    }
+
+    fun stop() {
+
+    }
 }

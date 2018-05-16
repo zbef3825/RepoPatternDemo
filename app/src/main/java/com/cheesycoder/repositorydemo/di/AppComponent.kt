@@ -1,10 +1,18 @@
 package com.cheesycoder.repositorydemo.di
 
 import com.cheesycoder.repositorydemo.DemoApplication
+import com.cheesycoder.repositorydemo.api.Api
+import com.cheesycoder.repositorydemo.api.ApiInteractor
+import com.google.gson.Gson
+//import com.cheesycoder.repositorydemo.api.ApiInteractor
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
+import okhttp3.Cache
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -22,12 +30,15 @@ import javax.inject.Singleton
  */
 @Singleton
 @Component(modules = [
+    NetModule::class,
     AppModule::class,
     ActivityBindingModule::class,
     ViewModelModules::class,
     AndroidSupportInjectionModule::class
 ])
 interface AppComponent: AndroidInjector<DemoApplication> {
+
+    fun getApiInteractor(): ApiInteractor
 
     @Component.Builder
     interface Builder {

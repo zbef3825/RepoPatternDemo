@@ -1,13 +1,9 @@
 package com.cheesycoder.repositorydemo
 
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import butterknife.BindView
 import butterknife.ButterKnife
-import com.cheesycoder.repositorydemo.ui.list.ListFragment
-import com.cheesycoder.repositorydemo.vm.WatchlistViewModel
+import com.cheesycoder.repositorydemo.api.ApiInteractor
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -20,11 +16,6 @@ class MainActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var flowManager: FlowManager
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    lateinit var watchlistViewModel: WatchlistViewModel
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -48,8 +39,6 @@ class MainActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
-
-        watchlistViewModel = ViewModelProviders.of(this,viewModelFactory)[WatchlistViewModel::class.java]
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         savedInstanceState?.apply {
