@@ -4,6 +4,7 @@ import com.cheesycoder.repositorydemo.DemoApplication
 import com.cheesycoder.repositorydemo.api.Api
 import com.cheesycoder.repositorydemo.api.ApiInteractor
 import com.cheesycoder.repositorydemo.api.ApiInteractorImp
+import com.cheesycoder.repositorydemo.db.AppDatabase
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -58,5 +59,5 @@ class NetModule {
 
         @Provides
         @Singleton
-        fun provideApiInteractor(api: Api): ApiInteractor = ApiInteractorImp(api)
+        fun provideApiInteractor(api: Api, appDatabase: AppDatabase): ApiInteractor = ApiInteractorImp(api,appDatabase)
 }

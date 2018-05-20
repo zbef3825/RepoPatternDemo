@@ -1,7 +1,11 @@
 package com.cheesycoder.repositorydemo.api
 
+import com.cheesycoder.repositorydemo.db.AppDatabase
+import com.cheesycoder.repositorydemo.db.WatchlistDao
 import com.cheesycoder.repositorydemo.model.WatchlistDataModel
 import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -21,30 +25,42 @@ import javax.inject.Singleton
  */
 @Singleton
 class ApiInteractorImp @Inject constructor(
-        val api: Api
+        val api: Api,
+        val appDatabase: AppDatabase
 ): BaseInteractor(), ApiInteractor {
 
     companion object {
         private const val TIMER_IN_MILI = 120000L
     }
 
+    private val watchDao: WatchlistDao by lazy {
+        appDatabase.watchlistDao()
+    }
+
     private var inMemoryWatchlist: List<WatchlistDataModel>? = null
 
     override fun getApiThresholdTimer(): Long = TIMER_IN_MILI
 
-    override fun getWatchlists(): Observable<List<WatchlistDataModel>>? {
+    override fun getWatchlists(): Single<List<WatchlistDataModel>>? {
         // Fetch new data
         return if (isTimeToDownload()) {
-            api.getWatchlists().subscribeOn(Schedulers.io())
+            api.getWatchlists()
+                    .subscribeOn(Schedulers.io())
+                    .doOnSuccess { inMemoryWatchlist = it } // Save it in-memory
+                    .doOnSuccess {  // Save it in db
+                        for (watchlist in it) watchDao.insertWatchlist(watchlist)
+                    }
+                    .doAfterTerminate { lastRequestTime = System.currentTimeMillis()  }
+                    .observeOn(AndroidSchedulers.mainThread())
         } else {
-            // Retrieve from local DB
-            if (inMemoryWatchlist == null) {
-                null
-            } else {
-                inMemoryWatchlist?.run {
-                    Observable.just(this).subscribeOn(Schedulers.io())
-                }
-            }
+            inMemoryWatchlist?.run {
+                Single.just(this)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+            } ?: watchDao.getAllWatchlists()
+                    .subscribeOn(Schedulers.io())
+                    .doOnSuccess { inMemoryWatchlist = it } // save it in-memory
+                    .observeOn(AndroidSchedulers.mainThread())
         }
     }
 
@@ -62,7 +78,7 @@ class ApiInteractorImp @Inject constructor(
 }
 
 interface ApiInteractor {
-    fun getWatchlists(): Observable<List<WatchlistDataModel>>?
+    fun getWatchlists(): Single<List<WatchlistDataModel>>?
     fun getWatchlist(id: Int): Observable<WatchlistDataModel>?
     fun postWatchlist(id: Int): Observable<Void>?
     fun deleteWatchlist(id: Int): Observable<Void>?

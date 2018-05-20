@@ -14,7 +14,7 @@ package com.cheesycoder.repositorydemo.api
  *\       ''--.~.|/
  */
 abstract class BaseInteractor {
-    protected var lastRequestDiff: Long = 0
-    protected fun isTimeToDownload(): Boolean = lastRequestDiff >= getApiThresholdTimer()
+    protected var lastRequestTime: Long = 0
+    protected fun isTimeToDownload(): Boolean = System.currentTimeMillis() - lastRequestTime >= getApiThresholdTimer()
     abstract fun getApiThresholdTimer(): Long
 }

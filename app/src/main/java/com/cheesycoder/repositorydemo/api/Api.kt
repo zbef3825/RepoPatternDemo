@@ -1,7 +1,7 @@
 package com.cheesycoder.repositorydemo.api
 
 import com.cheesycoder.repositorydemo.model.WatchlistDataModel
-import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.http.GET
 
 /**
@@ -19,5 +19,5 @@ import retrofit2.http.GET
  */
 interface Api {
     @GET("/watchlists")
-    fun getWatchlists(): Observable<List<WatchlistDataModel>>
+    fun getWatchlists(): Single<List<WatchlistDataModel>>
 }

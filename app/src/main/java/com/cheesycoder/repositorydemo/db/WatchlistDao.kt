@@ -3,6 +3,8 @@ package com.cheesycoder.repositorydemo.db
 import android.arch.persistence.room.*
 import com.cheesycoder.repositorydemo.model.WatchlistDataModel
 import io.reactivex.Flowable
+import io.reactivex.Maybe
+import io.reactivex.Single
 
 /**
  * Author: jinwo
@@ -20,7 +22,7 @@ import io.reactivex.Flowable
 @Dao
 interface WatchlistDao {
     @Query("SELECT * FROM watchlist")
-    fun getAllWatchlists(): Flowable<List<WatchlistDataModel>>
+    fun getAllWatchlists(): Single<List<WatchlistDataModel>>
 
     @Query("SELECT * FROM watchlist WHERE id = :uid")
     fun getWatchlist(uid: Int)

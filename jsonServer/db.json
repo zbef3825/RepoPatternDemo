@@ -1,0 +1,14 @@
+{
+	"watchlists" : [
+		{
+		"id" : 1,
+		"title" : "test_title_1",
+		"body" : "test_body_1",
+		"photo_url" : "https://i.imgur.com/b9Qia97.jpg"
+	}, {
+		"id" : 2,
+		"title" : "test_title_2",
+		"body" : "test_body_2",
+		"photo_url" : "https://i.imgur.com/ubcgHTF.jpg"
+	}]
+}
