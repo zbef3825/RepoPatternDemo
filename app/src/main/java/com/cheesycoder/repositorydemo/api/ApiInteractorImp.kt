@@ -1,5 +1,6 @@
 package com.cheesycoder.repositorydemo.api
 
+import android.content.SharedPreferences
 import com.cheesycoder.repositorydemo.db.AppDatabase
 import com.cheesycoder.repositorydemo.db.WatchlistDao
 import com.cheesycoder.repositorydemo.model.WatchlistDataModel
@@ -8,6 +9,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -26,11 +28,16 @@ import javax.inject.Singleton
 @Singleton
 class ApiInteractorImp @Inject constructor(
         val api: Api,
-        val appDatabase: AppDatabase
+        val appDatabase: AppDatabase,
+        @Named("vmConfig") val sharedPreferences: SharedPreferences
 ): BaseInteractor(), ApiInteractor {
-
     companion object {
         private const val TIMER_IN_MILI = 120000L
+        private const val TAG_LAST_REQUEST = "Api.interactor.imp.last.request.time"
+    }
+
+    init {
+        lastRequestTime = sharedPreferences.getLong(TAG_LAST_REQUEST, 0)
     }
 
     private val watchDao: WatchlistDao by lazy {
@@ -42,8 +49,7 @@ class ApiInteractorImp @Inject constructor(
     override fun getApiThresholdTimer(): Long = TIMER_IN_MILI
 
     override fun getWatchlists(): Single<List<WatchlistDataModel>>? {
-        // Fetch new data
-        return if (isTimeToDownload()) {
+        return if (isTimeToDownload()) { // Fetch new data if
             api.getWatchlists()
                     .subscribeOn(Schedulers.io())
                     .doOnSuccess { inMemoryWatchlist = it } // Save it in-memory
@@ -64,6 +70,11 @@ class ApiInteractorImp @Inject constructor(
         }
     }
 
+    override fun saveConfig() {
+        sharedPreferences.edit().putLong(TAG_LAST_REQUEST, lastRequestTime)
+                .apply()
+    }
+
     override fun getWatchlist(id: Int): Observable<WatchlistDataModel>? {
         TODO("Implement This")
     }
@@ -82,4 +93,5 @@ interface ApiInteractor {
     fun getWatchlist(id: Int): Observable<WatchlistDataModel>?
     fun postWatchlist(id: Int): Observable<Void>?
     fun deleteWatchlist(id: Int): Observable<Void>?
+    fun saveConfig()
 }

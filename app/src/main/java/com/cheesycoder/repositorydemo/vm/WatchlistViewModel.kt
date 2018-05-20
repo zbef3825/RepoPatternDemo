@@ -29,15 +29,11 @@ class WatchlistViewModel @Inject constructor(
         MutableLiveData<List<WatchlistDataModel>>()
     }
 
-    init {
-
-    }
-
     fun start() {
 
     }
 
     fun stop() {
-
+        apiInteractor.saveConfig()
     }
 }

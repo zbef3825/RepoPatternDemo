@@ -1,9 +1,12 @@
 package com.cheesycoder.repositorydemo
 
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import butterknife.ButterKnife
 import com.cheesycoder.repositorydemo.api.ApiInteractor
+import com.cheesycoder.repositorydemo.vm.WatchlistViewModel
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
