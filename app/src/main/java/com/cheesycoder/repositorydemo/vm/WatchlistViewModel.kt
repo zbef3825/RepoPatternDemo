@@ -34,6 +34,7 @@ class WatchlistViewModel @Inject constructor(
     }
 
     fun start() {
+
     }
 
     fun stop() {
