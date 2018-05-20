@@ -19,5 +19,5 @@ import retrofit2.http.GET
  */
 interface Api {
     @GET("/watchlists")
-    fun getWatchlists(): Observable<WatchlistDataModel>
+    fun getWatchlists(): Observable<List<WatchlistDataModel>>
 }

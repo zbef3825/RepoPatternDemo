@@ -29,8 +29,11 @@ class WatchlistViewModel @Inject constructor(
         MutableLiveData<List<WatchlistDataModel>>()
     }
 
+    init {
+
+    }
+
     fun start() {
-        Log.d("DEBUGGER", "STARTING")
     }
 
     fun stop() {

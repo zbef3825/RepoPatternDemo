@@ -14,5 +14,8 @@ package com.cheesycoder.repositorydemo.model
  *\       ''--.~.|/
  */
 data class WatchlistDataModel(
-        val uid: String
+        val id: Int,
+        val title: String?,
+        val body: String?,
+        val photo_url: String?
 )
