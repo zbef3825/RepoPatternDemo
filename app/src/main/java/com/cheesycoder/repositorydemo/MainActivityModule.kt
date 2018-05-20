@@ -24,8 +24,6 @@ import dagger.android.ContributesAndroidInjector
  */
 @Module
 abstract class MainActivityModule {
-
-
     @Module
     companion object {
         @JvmStatic

@@ -1,9 +1,13 @@
 package com.cheesycoder.repositorydemo.di
 
+import android.arch.persistence.room.Room
 import android.content.Context
 import com.cheesycoder.repositorydemo.DemoApplication
+import com.cheesycoder.repositorydemo.db.AppDatabase
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
 
 /**
  * Author: jinwo
@@ -19,7 +23,14 @@ import dagger.Module
  *\       ''--.~.|/
  */
 @Module
-abstract class AppModule {
-    @Binds
-    abstract fun bindContext(application: DemoApplication): Context
+class AppModule {
+    @Provides
+    @Singleton
+    fun bindContext(application: DemoApplication): Context = application
+
+    @Provides
+    @Singleton
+    fun providesAppDatabase(context: Context): AppDatabase {
+        return Room.databaseBuilder(context, AppDatabase::class.java, "app_database").build()
+    }
 }
