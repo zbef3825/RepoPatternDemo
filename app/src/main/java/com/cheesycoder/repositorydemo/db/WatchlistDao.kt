@@ -25,7 +25,7 @@ interface WatchlistDao {
     fun getAllWatchlists(): Single<List<WatchlistDataModel>>
 
     @Query("SELECT * FROM watchlist WHERE id = :uid")
-    fun getWatchlist(uid: Int)
+    fun getWatchlist(uid: Int): Single<WatchlistDataModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertWatchlist(watchlistDataModel: WatchlistDataModel)

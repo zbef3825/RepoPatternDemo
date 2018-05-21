@@ -4,6 +4,7 @@ import com.cheesycoder.repositorydemo.di.DaggerAppComponent
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
+import timber.log.Timber
 
 /**
  * Author: jinwo
@@ -32,5 +33,6 @@ class DemoApplication: DaggerApplication() {
             return
         }
         LeakCanary.install(this)
+        Timber.plant(Timber.DebugTree())
     }
 }

@@ -8,6 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -48,8 +49,8 @@ class ApiInteractorImp @Inject constructor(
 
     override fun getApiThresholdTimer(): Long = TIMER_IN_MILI
 
-    override fun getWatchlists(): Single<List<WatchlistDataModel>>? {
-        return if (isTimeToDownload()) { // Fetch new data if
+    override fun getWatchlists(): Single<List<WatchlistDataModel>> {
+        return if (isTimeToDownload()) { // Fetch new data if reached threshold
             api.getWatchlists()
                     .subscribeOn(Schedulers.io())
                     .doOnSuccess { inMemoryWatchlist = it } // Save it in-memory
@@ -57,15 +58,23 @@ class ApiInteractorImp @Inject constructor(
                         for (watchlist in it) watchDao.insertWatchlist(watchlist)
                     }
                     .doAfterTerminate { lastRequestTime = System.currentTimeMillis()  }
+                    .doAfterTerminate { Timber.i("Requested Data from Server") }
                     .observeOn(AndroidSchedulers.mainThread())
         } else {
             inMemoryWatchlist?.run {
                 Single.just(this)
                         .subscribeOn(Schedulers.io())
+                        .doAfterTerminate { Timber.i("Requested Data from In-Memory") }
                         .observeOn(AndroidSchedulers.mainThread())
             } ?: watchDao.getAllWatchlists()
                     .subscribeOn(Schedulers.io())
-                    .doOnSuccess { inMemoryWatchlist = it } // save it in-memory
+                    .doOnSuccess {
+                        it?.let {
+                            // save it in-memory if there is something
+                            if (it.isNotEmpty()) inMemoryWatchlist = it
+                        }
+                    }
+                    .doAfterSuccess { Timber.i("Requested Data from DB") }
                     .observeOn(AndroidSchedulers.mainThread())
         }
     }
@@ -89,7 +98,7 @@ class ApiInteractorImp @Inject constructor(
 }
 
 interface ApiInteractor {
-    fun getWatchlists(): Single<List<WatchlistDataModel>>?
+    fun getWatchlists(): Single<List<WatchlistDataModel>>
     fun getWatchlist(id: Int): Observable<WatchlistDataModel>?
     fun postWatchlist(id: Int): Observable<Void>?
     fun deleteWatchlist(id: Int): Observable<Void>?

@@ -39,6 +39,12 @@ abstract class ListFragment : DaggerFragment() {
     @BindView(R.id.list_view)
     protected lateinit var listView: RecyclerView
 
+    @BindView(R.id.error_view)
+    protected lateinit var errorView: ViewGroup
+
+    @BindView(R.id.progress_view)
+    protected lateinit var progressView: ViewGroup
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -63,11 +69,6 @@ abstract class ListFragment : DaggerFragment() {
     override fun onResume() {
         super.onResume()
         watchlistViewModel.start()
-    }
-
-    override fun onPause() {
-        watchlistViewModel.stop()
-        super.onPause()
     }
 
     override fun onDestroyView() {

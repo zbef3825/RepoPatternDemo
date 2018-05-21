@@ -2,9 +2,12 @@ package com.cheesycoder.repositorydemo.vm
 
 import android.arch.lifecycle.*
 import android.util.Log
+import com.cheesycoder.repositorydemo.BuildConfig
 import com.cheesycoder.repositorydemo.api.Api
 import com.cheesycoder.repositorydemo.api.ApiInteractor
+import com.cheesycoder.repositorydemo.api.DataWrapper
 import com.cheesycoder.repositorydemo.model.WatchlistDataModel
+import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Retrofit
 import javax.inject.Inject
 
@@ -25,15 +28,32 @@ class WatchlistViewModel @Inject constructor(
         val apiInteractor: ApiInteractor
 ): ViewModel() {
 
-    val watchlist: MutableLiveData<List<WatchlistDataModel>> by lazy {
-        MutableLiveData<List<WatchlistDataModel>>()
+    private val compositeDisposable = CompositeDisposable()
+
+    val watchlist: MutableLiveData<DataWrapper<List<WatchlistDataModel>>> by lazy {
+        MutableLiveData<DataWrapper<List<WatchlistDataModel>>>()
     }
 
     fun start() {
-
+        compositeDisposable.add(
+                apiInteractor.getWatchlists()
+                        .subscribe(
+                                {
+                                    watchlist.value = DataWrapper.success(it)
+                                },
+                                {
+                                    if (BuildConfig.DEBUG) it.printStackTrace()
+                                    watchlist.value = DataWrapper.error(it as Exception)
+                                }
+                        )
+        )
     }
 
-    fun stop() {
+    override fun onCleared() {
+        compositeDisposable.clear()
         apiInteractor.saveConfig()
+        super.onCleared()
     }
 }
+
+
