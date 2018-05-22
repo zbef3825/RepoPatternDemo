@@ -28,7 +28,6 @@ class AListFragment @Inject constructor() : ListFragment() {
         val TAG = "a.list.fragment"
     }
     override fun actionButtonPressed() {
-
     }
 
     override fun onResume() {

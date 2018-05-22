@@ -19,8 +19,8 @@ import android.arch.persistence.room.PrimaryKey
  */
 @Entity(tableName = "watchlist")
 data class WatchlistDataModel(
-        @PrimaryKey
-        val id: Int,
+        @PrimaryKey(autoGenerate = true)
+        val id: Int = 0,
 
         @ColumnInfo(name = "title")
         val title: String?,

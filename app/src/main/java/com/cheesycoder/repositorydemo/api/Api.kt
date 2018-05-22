@@ -2,7 +2,9 @@ package com.cheesycoder.repositorydemo.api
 
 import com.cheesycoder.repositorydemo.model.WatchlistDataModel
 import io.reactivex.Single
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 
 /**
  * Author: jinwo
@@ -18,6 +20,9 @@ import retrofit2.http.GET
  *\       ''--.~.|/
  */
 interface Api {
-    @GET("/watchlists")
+    @GET("watchlists")
     fun getWatchlists(): Single<List<WatchlistDataModel>>
+
+    @POST("watchlists")
+    fun postWatchlist(@Body watchlistDataModel: WatchlistDataModel): Single<Void>
 }

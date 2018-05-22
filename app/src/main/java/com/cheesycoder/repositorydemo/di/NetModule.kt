@@ -49,7 +49,7 @@ class NetModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit =
             Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2/8889/")
+                    .baseUrl("http://10.0.2.2:3000/")
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(okHttpClient)

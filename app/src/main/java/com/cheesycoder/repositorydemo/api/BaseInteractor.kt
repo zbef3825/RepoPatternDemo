@@ -1,7 +1,5 @@
 package com.cheesycoder.repositorydemo.api
 
-import android.content.SharedPreferences
-
 /**
  * Author: jinwo
  * Date: 2018-05-15

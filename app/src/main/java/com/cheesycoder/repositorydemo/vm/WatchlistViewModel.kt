@@ -7,7 +7,9 @@ import com.cheesycoder.repositorydemo.api.Api
 import com.cheesycoder.repositorydemo.api.ApiInteractor
 import com.cheesycoder.repositorydemo.api.DataWrapper
 import com.cheesycoder.repositorydemo.model.WatchlistDataModel
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import javax.inject.Inject
 
@@ -47,6 +49,27 @@ class WatchlistViewModel @Inject constructor(
                                 }
                         )
         )
+    }
+
+    fun addWatchlist() {
+        TODO("Implement add to watch list")
+//        val testWatchlist = WatchlistDataModel(
+//                title = "testing_title_with_button",
+//                body = "testing_body_with_button",
+//                photo_url = "testing_photo_url_with_button"
+//        )
+//        compositeDisposable.add(
+//                apiInteractor.postWatchlist(testWatchlist)
+//                        .subscribe(
+//                                {
+//                                    watchlist.value = DataWrapper.success(it)
+//                                },
+//                                {
+//                                    if (BuildConfig.DEBUG) it.printStackTrace()
+//                                    // Nothing happens
+//                                }
+//                        )
+//        )
     }
 
     override fun onCleared() {
